@@ -5,9 +5,9 @@
   "scripts": {
     "build": "bash build.sh && next build",
     "dev": "next dev",
-    "start": "next start",
+    "start": "next start -p ${PORT:-3000}",
     "lint": "next lint"
-  },
+},
   "dependencies": {
     "multer": "^2.2.0",
     "next": "16.2.9",
