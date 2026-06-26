@@ -20,7 +20,8 @@ export async function POST(request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const inputPath = path.join(process.cwd(), "tmp", `input_${Date.now()}.txt`);
-    const encoderPath = path.join(process.cwd(), "bin", "encoder.exe");
+    const isWindows = process.platform === "win32";
+    const encoderPath = path.join(process.cwd(), "bin", isWindows ? "encoder.exe" : "encoder");
 
     // Create tmp folder if it doesn't exist
     await import("fs").then((fs) =>

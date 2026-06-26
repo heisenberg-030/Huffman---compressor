@@ -18,7 +18,8 @@ export async function POST(request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const inputPath = path.join(process.cwd(), "tmp", `compressed_${Date.now()}.huf`);
-    const decoderPath = path.join(process.cwd(), "bin", "decoder.exe");
+    const isWindows = process.platform === "win32";
+    const decoderPath = path.join(process.cwd(), "bin", isWindows ? "decoder.exe" : "decoder");
 
     await import("fs").then((fs) =>
       fs.promises.mkdir(path.join(process.cwd(), "tmp"), { recursive: true })
