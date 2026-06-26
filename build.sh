@@ -1,4 +1,4 @@
 #!/bin/bash
 mkdir -p bin
-g++ encoder.cpp -o bin/encoder
-g++ decoder.cpp -o bin/decoder
+g++ Encoder.cpp -o bin/encoder
+g++ Decoder.cpp -o bin/decoder
