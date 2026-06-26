@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Huffman File Compressor
 
-## Getting Started
+A full-stack file compression web application powered by a C++ Huffman encoding engine, wrapped in a modern Next.js frontend.
 
-First, run the development server:
+## 🔗 Links
+- **Live Demo:** [huffman-compressor-production.up.railway.app](https://huffman-compressor-production.up.railway.app)
+- **GitHub:** [github.com/heisenberg-030/Huffman---compressor](https://github.com/heisenberg-030/Huffman---compressor)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 📌 About The Project
+
+This project implements **Huffman Coding** — a greedy algorithm used for lossless data compression. Characters that appear more frequently in a file are assigned shorter binary codes, while less frequent characters get longer codes, resulting in an overall smaller file size.
+
+The unique aspect of this project is the architecture — a native **C++ compression engine** is bridged to a **Next.js web application** via Node.js `child_process`, combining systems-level programming with modern full-stack web development.
+
+---
+
+## ✨ Features
+
+- 📁 Upload any `.txt` file and compress it using Huffman encoding
+- 📊 View real-time compression stats — original size, compressed size, and compression ratio
+- ⬇️ Download the compressed `.huf` file
+- 🔄 Upload a `.huf` file and decompress it back to the original text
+- 🌐 Fully deployed and accessible via a live URL
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Core Engine | C++ (Huffman encoding/decoding) |
+| Backend | Next.js API Routes, Node.js child_process |
+| Frontend | Next.js 15, React, Tailwind CSS |
+| Deployment | Railway |
+| Version Control | Git, GitHub |
+
+---
+
+## ⚙️ How Huffman Coding Works
+
+1. **Frequency Analysis** — Count how often each character appears in the file
+2. **Priority Queue** — Insert all characters into a min-heap sorted by frequency
+3. **Build Huffman Tree** — Repeatedly merge the two lowest-frequency nodes until one tree remains
+4. **Generate Codes** — Traverse the tree; left edge = 0, right edge = 1
+5. **Encode** — Replace each character with its Huffman code
+6. **Store Tree** — Serialize the tree into the compressed file for later decoding
+7. **Decode** — Reconstruct the tree and walk it bit by bit to recover original text
+
+---
+
+## 🏗️ Architecture
+
+```
+User uploads .txt file (React Frontend)
+          ↓
+Next.js API Route receives file
+          ↓
+Node.js child_process calls C++ encoder binary
+          ↓
+C++ engine builds Huffman tree + encodes file
+          ↓
+Compressed .huf file returned with stats
+          ↓
+User downloads compressed file
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🚀 Running Locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Prerequisites
+- Node.js 18+
+- g++ compiler
 
-## Learn More
+### Steps
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Clone the repository
+git clone https://github.com/heisenberg-030/Huffman---compressor.git
+cd Huffman---compressor
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Compile the C++ engine
+mkdir -p bin
+g++ Encoder.cpp -o bin/encoder
+g++ Decoder.cpp -o bin/decoder
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Install dependencies
+npm install
 
-## Deploy on Vercel
+# Run the development server
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📁 Project Structure
+
+```
+huffman-compressor/
+├── app/
+│   ├── api/
+│   │   ├── compress/
+│   │   │   └── route.js      # Compression API endpoint
+│   │   └── decompress/
+│   │       └── route.js      # Decompression API endpoint
+│   ├── page.js               # Main frontend UI
+│   └── layout.js
+├── bin/                      # Compiled C++ binaries
+├── Encoder.cpp               # Huffman encoder source
+├── Decoder.cpp               # Huffman decoder source
+├── build.sh                  # Linux build script for Railway
+├── public/
+└── package.json
+```
+
+---
+
+## 📊 Performance
+
+| File Size | Compression Ratio |
+|---|---|
+| < 100 bytes | May increase (tree overhead) |
+| ~1 KB | ~20–30% reduction |
+| ~6 KB | ~48% reduction |
+| Large files | Up to ~50% reduction |
+
+> Note: Huffman compression works best on larger files with repeated characters. Small files may see size increase due to the overhead of storing the Huffman tree.
+
+---
+
+## 🧠 What I Learned
+
+- How Huffman coding works at the binary level
+- Bridging native C++ binaries with a Node.js backend using `child_process`
+- Cross-platform binary compilation (Windows `.exe` vs Linux binary)
+- File handling in Next.js API routes using `FormData` and `Buffer`
+- Deploying full-stack apps with native dependencies on Railway
+
+---
+
+## 📄 License
+
+MIT License — feel free to use this project for learning purposes.
